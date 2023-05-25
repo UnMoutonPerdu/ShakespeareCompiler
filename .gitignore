@@ -1,5 +1,9 @@
 doc
 wordlist
+test_import.ml
+test_import.mll
+words.mll
+read.ml
 splast.cmi
 splast.cmo
 spllex.cmi

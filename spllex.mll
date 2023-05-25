@@ -1,5 +1,5 @@
 {
-    open Splparse ;; 
+    open Splparse ;;
 }
 
 (* UTILS *)
@@ -134,9 +134,9 @@ rule lex = parse
     | "not "
         { Not }
     | act as num  
-        { Act(10 * int_of_string(to_decimal 0 (Lexing.from_string num))) }
+        { act_or_scene lexbuf; Act(10 * int_of_string(to_decimal 0 (Lexing.from_string num))) }
     | scene as num 
-        { Scene(int_of_string(to_decimal 0 (Lexing.from_string num))) }
+        { act_or_scene lexbuf; Scene(int_of_string(to_decimal 0 (Lexing.from_string num))) }
     | ("the")(fucking_new_line)("sum")(fucking_new_line)("of")
         { Sum }
     | ("the")(fucking_new_line)("product")(fucking_new_line)("of")
@@ -200,13 +200,11 @@ and in_description var = parse
     | _ 
         {in_description var lexbuf}
 
-(* and act_or_scene var = parse 
+and act_or_scene = parse 
     | "."
-        {in_description var lexbuf}
+        { () }
     | _ 
-        {act_or_scene var lexbuf}
-    | eof 
-        {(var @ [EOF])} *)
+        {act_or_scene lexbuf}
 
 and in_recall = parse
     | "!" 

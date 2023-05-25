@@ -25,7 +25,7 @@ let main() =
   while true do
     try
       let _ = Printf.printf  "> %!" in
-      let e = Splparse.program Spllex.description lexbuf in
+      let e = Splparse.program Spllex.lex lexbuf in
       let _ = Printf.printf "Recognized: " in
       let _ = Splast.print stdout e in
       let _ = Printf.fprintf stdout " =\n%!" in
