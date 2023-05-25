@@ -213,8 +213,6 @@ and in_recall = parse
         { () }
     | _ 
         {in_recall lexbuf}
-    | eof 
-        { EOF }
 
 and to_decimal num = parse
     | "Act "    { to_decimal num lexbuf}
