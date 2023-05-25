@@ -1,0 +1,18 @@
+splast.cmo :
+splast.cmx :
+spllex.cmo : \
+    splparse.cmi
+spllex.cmx : \
+    splparse.cmx
+splloop.cmo :
+splloop.cmx :
+splparse.cmo : \
+    splast.cmo \
+    splparse.cmi
+splparse.cmx : \
+    splast.cmx \
+    splparse.cmi
+splparse.cmi : \
+    splast.cmo
+splsem.cmo :
+splsem.cmx :
