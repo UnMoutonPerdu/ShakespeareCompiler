@@ -1,2 +1,16 @@
 doc
 wordlist
+splast.cmi
+splast.cmo
+spllex.cmi
+spllex.cmo
+spllex.ml
+splloop
+splloop.cmi
+splloop.cmo
+splparse.cmi
+splparse.cmo
+splparse.ml
+splparse.mli
+splsem.cmi
+splsem.cmo
