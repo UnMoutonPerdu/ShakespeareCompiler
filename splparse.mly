@@ -2,6 +2,7 @@
 open Splast ;;
 %}
 
+%token EOF
 %token Article  
 %token And
 %token Be       
@@ -51,7 +52,6 @@ open Splast ;;
 %token Quotient
 %token Square
 %token Cube 
-%token EOF
 
 %left Sum Difference
 %left Product Quotient
@@ -109,6 +109,10 @@ line:
     | IfNot Goto Scene {IFNTGOTO $3}
     | If Goto Act {IFGOTO $3}
     | If Goto Scene {IFGOTO $3}
+    | Be FirstPers PosComp Than SecPers { BINOP(CHARAC "FIRST", ">=", CHARAC "SECOND") }
+    | Be FirstPers PosComp Than charac { BINOP(CHARAC "FIRST", ">=", $5) }
+    | Be FirstPers NegComp Than SecPers { BINOP(CHARAC "FIRST", "<=", CHARAC "SECOND") }
+    | Be FirstPers NegComp Than charac { BINOP(CHARAC "FIRST", "<=", $5) }
 ;
 
 value:

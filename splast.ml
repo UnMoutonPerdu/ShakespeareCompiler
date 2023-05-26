@@ -27,6 +27,7 @@ and line =
   | PRINT 
   | IFNTGOTO of int 
   | IFGOTO of int 
+  | BINOP of (value * string * value)
 ;;
 
 type scene = {
@@ -47,19 +48,11 @@ type toplevel =
 type program = toplevel list ;;
 
 
-(* open Printf ;;
+open Printf ;;
 
 
 let rec print_expr oc = function
-  | Int n -> fprintf oc "%d" n
-  | Bool b -> fprintf oc "%s" (if b then "T" else "F")
-  | Ident s -> fprintf oc "%s" s
-  | String s -> fprintf oc "\"%s\"" (String.escaped s)
-  | App (f_name, params) -> fprintf oc "%s (%a)" f_name print_exprs params
-  | Binop (op, e1, e2) ->
-      fprintf oc "(%a %s %a)" print_expr e1 op print_expr e2
-  | Monop (op, e) -> fprintf oc "%s%a" op print_expr e
-  | ArrayRead (s, e) -> fprintf oc "%s[%a]" s print_expr e
+  | _ -> ()
 
 
 and print_exprs oc = function
@@ -69,38 +62,37 @@ and print_exprs oc = function
 
 
 and print_var_decl oc = function
-  | (v_name, Scalar) -> fprintf oc "var %s ;\n" v_name
-  | (v_name, (Array e)) -> fprintf oc "var %s[%a] ;\n" v_name print_expr e
+  | _ -> ()
 ;;
 
 
-let rec print_scene oc = function
-  | While (e, i) ->
-      fprintf oc "while %a do\n%adone\n" print_expr e print_instr i
-  | If (e, i1, i2) ->
-      fprintf oc "if %a then %aelse %aendif;\n"
-        print_expr e print_instr i1 print_instr i2
-  | Assign (id, e) -> fprintf oc "%s := %a ;\n" id print_expr e
-  | ArrayWrite (id, e1, e2) ->
-      fprintf oc "%s[%a] := %a ;\n" id print_expr e1 print_expr e2
-  | Seq (i1, i2) -> fprintf oc "%a%a" print_instr i1 print_instr i2
-  | Return e_op -> (
-      match e_op with
-      | None ->fprintf oc "return ;\n"
-      | Some e -> fprintf oc "return %a ;\n" print_expr e
-     )
-  | Iapp (f_name, params) -> fprintf oc "%s (%a) ;\n" f_name print_exprs params
-  | Print params -> fprintf oc "print (%a) ;\n" print_exprs params
+let rec print_instr oc = function
+  | _ -> ()
 ;;
 
+let rec print_scene oc = function 
+  | (h:scene) :: q -> fprintf oc "Scene %d (%a) : %a\n" h.id print_instr h.body print_scene q
+  | [] -> ()
+;;
+
+let print_var_decls oc v_names = List.iter (print_var_decl oc) v_names ;;
+
+let rec print_param_decls oc = function
+  | [] -> ()
+  | [last] -> fprintf oc "%s" last
+  | h :: q -> fprintf oc "%s, %a" h print_param_decls q
+;;
+
+let rec print_act oc = function
+  | h :: q -> fprintf oc "Act %d (%a) : %a\n" h.id print_scene h.scenes print_act q
+  | [] -> ()
+;;
 
 let print_toplevel oc = function
-  | VARDECL decl -> print_var_decl oc decl
-  | BEGIN f_def ->
-      fprintf oc "BEGIN %d : %a"
-        f_def.id print_scene f_def.scenes
+  | VARDECL decl -> print_param_decls oc decl
+  | BEGIN f_def -> fprintf oc "BEGIN [%a]" print_act f_def
 ;;
 
 
-let print_program oc prgm = List.iter (print_toplevel oc) prgm ;;
- *)
+let print_program oc prgm = fprintf oc "OUISDFHSLD\n" ;;
+
